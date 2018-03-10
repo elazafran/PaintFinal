@@ -136,6 +136,11 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
         }
     }
 
+    /**
+     * Crea la vista del canvas
+     *
+     * @param surfaceHolder
+     */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
@@ -146,17 +151,34 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
 
     }
 
+    /**
+     *  Cuando ocurre algún cambio
+     *
+     * @param surfaceHolder
+     * @param i
+     * @param width
+     * @param height
+     */
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int width, int height) {
         // Crea un bitmap con las dimensiones del view
         bitMap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
     }
 
+    /**
+     * cuando lo destruimos
+     *
+     * @param surfaceHolder
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         this.finalizarHiloDibujo();
     }
 
+    /**
+     * Destruimos todos los hilos
+     *
+     */
     private void finalizarHiloDibujo() {
         boolean retry = true;
         while (retry) {
@@ -169,6 +191,12 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
         }
     }
 
+    /**
+     * Capturamos la interacción ya se pulsando o mooviendo el dedo
+     *
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         touched_x = event.getX();
@@ -191,7 +219,10 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
         return true;
     }
 
-
+    /**
+     * Clase que utilizamos para pintar
+     *
+     */
     class HiloDibujo extends Thread {
         // soporte de la superficie de dibujo
         private SurfaceHolder holder;
@@ -246,6 +277,10 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
         }
     }
 
+    /**
+     * Creamos un nuevo canvas vacío
+     *
+     */
     public void NuevoDibujo() {
         // drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         // drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);

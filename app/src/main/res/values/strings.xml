@@ -3,4 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="color_elegido">color elegido</string>
     <string name="boton_seleccionado">boton seleccionado</string>
+    <string name="titulo_tamnio">Tamaño de la brocha:</string>
+    <string name="sub_titulo_tamnio">Selecciona el tamaño de la brocha</string>
+    <string name="titulo_color">Paleta de Colores</string>
+    <string name="sub_titulo_color">Selecciona el color para la brocha</string>
+    <string name="dialogo_titulo_colores">Elige color:</string>
+    <string name="dialogo_titulo_tamnio">Elige tamaño:</string>
 </resources>

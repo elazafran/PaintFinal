@@ -2,17 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
-        android:dialogTitle="Elige color:"
+        android:dialogTitle="@string/dialogo_titulo_colores"
         android:entries="@array/colores"
         android:entryValues="@array/codigocolores"
         android:key="color"
-        android:summary="Selecciona el color para la brocha"
-        android:title="Paleta de Colores" />
+        android:summary="@string/sub_titulo_color"
+        android:title="@string/titulo_color" />
     <ListPreference
-        android:dialogTitle="Elige tamaño:"
+        android:dialogTitle="@string/dialogo_titulo_tamnio"
         android:entries="@array/tamanio"
         android:entryValues="@array/tamanio"
         android:key="tamanio"
-        android:summary="Selecciona el tamaño de la brocha"
-        android:title="Tamaño de la brocha:" />
+        android:summary="@string/sub_titulo_tamnio"
+        android:title="@string/titulo_tamnio" />
 </PreferenceScreen>

@@ -39,13 +39,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertData(String name, String subname){
+    public boolean insertData(String name, String path){
         // Activamos que podemos escribir en la base de datos
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2, name);
-        contentValues.put(COL_3, subname);
+        contentValues.put(COL_3, path);
+
         long result = db.insert(TABLE_NAME, null, contentValues);
+
         if (result==-1)
             return false;
         else

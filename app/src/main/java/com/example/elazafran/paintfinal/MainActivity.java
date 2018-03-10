@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddhhmmss");
                 String folderName = JPEG_FILE_PREFIX+formatter.format(today)+JPEG_FILE_SUFFIX;
 
-                //guardamos
+                // guardamos
                 lienzo.saveBitmap(folderName);
 
                 // insertamos en bbdd
