@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colores">
+        <item>Verde</item>
+        <item>Rojo</item>
+        <item>Azul</item>
+        <item>Negro</item>
+    </string-array>
+    <string-array name="codigocolores">
+        <item>-16711936</item>
+        <item>-256</item>
+        <item>-65536</item>
+        <item>-16776961</item>
+
+    </string-array>
+    <string-array name="tamanio">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+    </string-array>
+</resources>
