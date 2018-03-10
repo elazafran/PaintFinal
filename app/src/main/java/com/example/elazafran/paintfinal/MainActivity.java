@@ -1,8 +1,5 @@
 package com.example.elazafran.paintfinal;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,8 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,14 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,27 +32,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
-    private ImageButton btnSave, btnBorrar,btnPintar,btnNuevo;
+    private static LienzoDibujo lienzo;
     public static int color = Color.BLACK;
     public static int tamanio = 20;
+    public static int tamanioPath; // Variable para el tamaño del pincel
     private SharedPreferences preferencias;
 
-    ImageButton btnPreferencias;
+
 
     ImageButton negro;
     ImageButton blanco;
     ImageButton rojo;
     ImageButton verde;
     ImageButton azul;
-    private static LienzoDibujo lienzo;
+    ImageButton amarillo;
+    ImageButton magenta;
+
     float ppequenyo;
     float pmediano;
     float pgrande;
     float pdefecto;
+    ImageButton mas;
     ImageButton trazo;
+    ImageButton menos;
     ImageButton anyadir;
     ImageButton borrar;
     ImageButton guardar;
+    ImageButton hacerfoto;
+    ImageButton btnPreferencias;
+
+    Button abrir;
+    Button recientes;
+    Button nuevo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +75,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         preferencias = PreferenceManager.getDefaultSharedPreferences(this);
 
         negro = (ImageButton)findViewById(R.id.colornegro);
-        blanco = (ImageButton)findViewById(R.id.colorblanco);
         rojo = (ImageButton)findViewById(R.id.colorrojo);
         verde = (ImageButton)findViewById(R.id.colorverde);
         azul = (ImageButton)findViewById(R.id.colorazul);
+        amarillo= (ImageButton)findViewById(R.id.coloramarillo);
+        magenta= (ImageButton)findViewById(R.id.colormagenta);
+        azul = (ImageButton)findViewById(R.id.colorazul);
+
+        mas = (ImageButton)findViewById(R.id.mas);
         trazo = (ImageButton)findViewById(R.id.trazo);
-        anyadir = (ImageButton)findViewById(R.id.anyadir);
+        menos = (ImageButton)findViewById(R.id.menos);
         borrar = (ImageButton)findViewById(R.id.borrar);
         guardar = (ImageButton)findViewById(R.id.guardar);
+        hacerfoto = (ImageButton)findViewById(R.id.hacerfoto);
+
+        nuevo = (Button)findViewById(R.id.nuevo);
+        abrir = (Button)findViewById(R.id.abrir);
+        recientes = (Button)findViewById(R.id.recientes);
+
+
+
 
         negro.setOnClickListener(this);
-        blanco.setOnClickListener(this);
+        amarillo.setOnClickListener(this);
+        magenta.setOnClickListener(this);
         rojo.setOnClickListener(this);
         verde.setOnClickListener(this);
         azul.setOnClickListener(this);
+
+        mas.setOnClickListener(this);
         trazo.setOnClickListener(this);
-        anyadir.setOnClickListener(this);
+        menos.setOnClickListener(this);
         borrar.setOnClickListener(this);
         guardar.setOnClickListener(this);
+        hacerfoto.setOnClickListener(this);
+
+        nuevo.setOnClickListener(this);
+        abrir.setOnClickListener(this);
+        recientes.setOnClickListener(this);
 
         lienzo = (LienzoDibujo)findViewById(R.id.lienzoDibujo);
 
@@ -138,9 +162,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         switch (v.getId()){
-            case R.id.anyadir:
+            case R.id.mas:
+                tamanioPath = Integer.parseInt(preferencias.getString("tamanio", ""))+10; // Accion: Aumentar a 5 el tamaño del lapiz
+                preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
+                Toast.makeText(this, "más tamaño", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menos:
+                tamanioPath = Integer.parseInt(preferencias.getString("tamanio", ""))-10; // Accion: Aumentar a 5 el tamaño del lapiz
+                preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
+                Toast.makeText(this, "menos tamaño", Toast.LENGTH_SHORT).show();
+                break;
+             /*case R.id.anyadir:
                 lienzo.NuevoDibujo();
-                /*
+
                 AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
                 newDialog.setTitle("Nuevo Dibujo");
                 newDialog.setMessage("¿Comenzar nuevo dibujo (perderás el dibujo actual)?");
@@ -157,19 +191,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 newDialog.show();
-                */
+
+
+                break;
+              */
+            case R.id.nuevo:
+
+                Toast.makeText(this, "nuevo", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.recientes:
+
+                Toast.makeText(this, "recientes", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.abrir:
+
+                Toast.makeText(this, "abrir", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.guardar:
-                foto();
+
                 Toast.makeText(this, "guardamos", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.hacerfoto:
+                hacerFoto();
+                Toast.makeText(this, "hacemos foto", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.borrar:
+                this.color=Color.WHITE;
+                Toast.makeText(this, "pintamos de blanco", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.colornegro:
-                color = v.getTag().toString();
                 this.color=Color.BLACK;
+                color = v.getTag().toString();
                 //lienzo.setColor(color);
                 break;
-            case R.id.colorblanco:
-                this.color=Color.WHITE;
+            case R.id.coloramarillo:
+                this.color=Color.YELLOW;
+                color = v.getTag().toString();
+                Toast.makeText(this, "pintamos de amarillo", Toast.LENGTH_SHORT).show();
+                //lienzo.setColor(color);
+                break;
+            case R.id.colormagenta:
+                this.color=Color.MAGENTA;
                 color = v.getTag().toString();
                 //lienzo.setColor(color);
                 break;
@@ -181,13 +243,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.colorverde:
                 this.color=Color.GREEN;
                 color = v.getTag().toString();
+                Toast.makeText(this, "pintamos de verde", Toast.LENGTH_SHORT).show();
                // lienzo.setColor(color);
                 break;
             case R.id.colorrojo:
                 this.color=Color.RED;
+                Toast.makeText(this, "pintamos de rojo", Toast.LENGTH_SHORT).show();
                 color = v.getTag().toString();
                 //lienzo.setColor(color);
                 break;
+
 
             default:
 
@@ -195,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void foto() {
+    private void hacerFoto() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -251,4 +316,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return storageDir;
     }
+
+
 }

@@ -264,16 +264,19 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
 
                     canvas.drawBitmap(Bitmap.createBitmap (LienzoDibujo.this.getWidth()
                             , LienzoDibujo.this.getHeight(), Bitmap.Config.ARGB_8888), 0,0,null);
-                    drawPaint.setColor(MainActivity.color);
+                    drawPaint.setColor(Integer.parseInt(preferencias.getString("color", "Azul")));
                     drawPaint.setAntiAlias(true);
-                    drawPaint.setStrokeWidth(Integer.parseInt(preferencias.getString("tamanio","")));
+                    drawPaint.setStrokeWidth(Integer.parseInt(preferencias.getString("tamanio", "")));
                     drawPaint.setStyle(Paint.Style.STROKE);
                     drawPaint.setStrokeJoin(Paint.Join.ROUND);
                     drawPaint.setStrokeCap(Paint.Cap.ROUND);
                     canvas.drawPath(drawPath, drawPaint);
                     bitMap = getDrawingCache();
 
-                } finally {
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                finally {
                     if (canvas != null)
                         holder.unlockCanvasAndPost(canvas);
                 }

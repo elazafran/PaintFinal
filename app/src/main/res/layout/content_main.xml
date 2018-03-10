@@ -18,14 +18,15 @@
         android:layout_weight="1"
         android:layout_height="0dp"
         >
-
         <ImageButton
-            android:id="@+id/anyadir"
+            android:id="@+id/menos"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_stat_name"
-             />
+            android:layout_weight="1"
+            android:src="@drawable/menos"
+            android:contentDescription="@string/boton_seleccionado"
+            />
+
 
         <ImageButton
             android:id="@+id/trazo"
@@ -33,6 +34,16 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/trazo"
+            android:contentDescription="@string/boton_seleccionado"
+            />
+
+        <ImageButton
+            android:id="@+id/mas"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mas"
+            android:contentDescription="@string/boton_seleccionado"
             />
 
         <ImageButton
@@ -41,7 +52,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/borrar"
-
+            android:contentDescription="@string/boton_seleccionado"
             />
 
         <ImageButton
@@ -50,13 +61,54 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/guardar"
+            android:contentDescription="@string/boton_seleccionado"
              />
+        <ImageButton
+            android:id="@+id/hacerfoto"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/camara"
+            android:contentDescription="@string/boton_seleccionado"
+            />
         <ImageButton
             android:id="@+id/preferencias"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/preferencias"
+            android:contentDescription="@string/boton_seleccionado"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        >
+        <Button
+            android:id="@+id/nuevo"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="nuevo archivo"
+            android:contentDescription="@string/boton_seleccionado"
+            />
+        <Button
+            android:id="@+id/recientes"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="recientes"
+            android:contentDescription="@string/boton_seleccionado"
+            />
+        <Button
+            android:id="@+id/abrir"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="abrir"
+            android:contentDescription="@string/boton_seleccionado"
             />
     </LinearLayout>
 
@@ -81,15 +133,7 @@
 
         >
 
-        <ImageButton
-            android:id="@+id/colornegro"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/altura_color"
-            android:background="#ff000000"
-            android:tag="#ff000000"
 
-            />
 
         <ImageButton
             android:id="@+id/colorrojo"
@@ -99,6 +143,7 @@
 
             android:background="#ffff0000"
             android:tag="#ffff0000"
+            android:contentDescription="@string/color_elegido"
             />
 
         <ImageButton
@@ -109,6 +154,7 @@
 
             android:background="#ff00ff00"
             android:tag="#ff00ff00"
+            android:contentDescription="@string/color_elegido"
             />
 
         <ImageButton
@@ -119,17 +165,43 @@
 
             android:background="#ff0000ff"
             android:tag="#ff0000ff"
+            android:contentDescription="@string/color_elegido"
+            />
+        <ImageButton
+            android:id="@+id/coloramarillo"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/altura_color"
+            android:background="#ffffff00"
+            android:tag="#ffffff00"
+            android:contentDescription="@string/color_elegido"
             />
 
         <ImageButton
-            android:id="@+id/colorblanco"
+            android:id="@+id/colormagenta"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="@dimen/altura_color"
 
-            android:background="#ffffff"
-            android:tag="#ffffffff"
+            android:background="#ffff00ff"
+            android:tag="#ffff00ff"
+            android:contentDescription="@string/color_elegido"
             />
 
+
+
+        <ImageButton
+            android:id="@+id/colornegro"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/altura_color"
+            android:background="#ff000000"
+            android:tag="#ff000000"
+            android:contentDescription="@string/color_elegido"
+
+            />
+
+
     </LinearLayout>
+
 </LinearLayout>
