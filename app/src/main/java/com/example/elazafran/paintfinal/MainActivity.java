@@ -1,5 +1,6 @@
 package com.example.elazafran.paintfinal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -55,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     float pmediano;
     float pgrande;
     float pdefecto;
+
     ImageButton mas;
-    ImageButton trazo;
     ImageButton menos;
     ImageButton anyadir;
     ImageButton borrar;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         azul = (ImageButton)findViewById(R.id.colorazul);
 
         mas = (ImageButton)findViewById(R.id.mas);
-        trazo = (ImageButton)findViewById(R.id.trazo);
+
         menos = (ImageButton)findViewById(R.id.menos);
         borrar = (ImageButton)findViewById(R.id.borrar);
         guardar = (ImageButton)findViewById(R.id.guardar);
@@ -97,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recientes = (Button)findViewById(R.id.recientes);
 
 
-
-
         negro.setOnClickListener(this);
         amarillo.setOnClickListener(this);
         magenta.setOnClickListener(this);
@@ -107,15 +107,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         azul.setOnClickListener(this);
 
         mas.setOnClickListener(this);
-        trazo.setOnClickListener(this);
+
         menos.setOnClickListener(this);
         borrar.setOnClickListener(this);
         guardar.setOnClickListener(this);
         hacerfoto.setOnClickListener(this);
+        recientes.setOnClickListener(this);
 
         nuevo.setOnClickListener(this);
         abrir.setOnClickListener(this);
-        recientes.setOnClickListener(this);
 
         lienzo = (LienzoDibujo)findViewById(R.id.lienzoDibujo);
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
                 Toast.makeText(this, "menos tamaño", Toast.LENGTH_SHORT).show();
                 break;
-             /*case R.id.anyadir:
+             case R.id.nuevo:
                 lienzo.NuevoDibujo();
 
                 AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
@@ -197,18 +197,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 break;
-              */
-            case R.id.nuevo:
 
-                Toast.makeText(this, "nuevo", Toast.LENGTH_SHORT).show();
-                break;
+
             case R.id.recientes:
+
+
                 Cursor res = myDB.getAllData();
-                if (res.getCount() == 0){ // Si no tiene filas, cargamos mensaje de error y salimos
-                    mostrarMensaje("Error", "Nothing found");
+                // si no hay archivos mostramos error
+                if (res.getCount() == 0){
+                    mostrarMensaje("Error", "no hay archivos previos");
                     return;
                 }
-                // Si tiene cargamo un buffer con los datos y lo cargamos
+                // añadimos valores al string para pintar
                 StringBuffer buffer = new StringBuffer();
                 while (res.moveToNext()){
                     buffer.append("Name: "+res.getString(1)+"\n");
@@ -220,22 +220,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.abrir:
 
+
+                // ACTION_OPEN_DOCUMENT intent para seleccionar el fichero desde
+                // el explorador de ficheros del sistema
+                //Cuando la aplicación envía la intent ACTION_OPEN_DOCUMENT,
+                //lanza un selector que muestra todos los proveedores de documentos coincidentes.
+                Intent intent = new Intent("android.intent.action.GET_CONTENT");//new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+                // Al agregar la categoría CATEGORY_OPENABLE a la intent filtra
+                // los resultados para mostrar solo documentos que se pueden abrir, como archivos de imagen
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                // sólo nos interesan las imágenes
+                intent.setType("image/*");
+
+                startActivityForResult(intent, READ_REQUEST_CODE);
+
                 Toast.makeText(this, "abrir", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.guardar:
-                // Generamos nombre
+
+                // creamos un patron para guardar los archivos
                 Date today = Calendar.getInstance().getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddhhmmss");
                 String folderName = "IMG_"+formatter.format(today)+".png";
 
-                lienzo.saveBitmap(folderName); // Llamamos al metodo de guardar
+                //guardamos
+                lienzo.saveBitmap(folderName);
 
-                // Añadimos a la base de datos
+                // insertamos en bbdd
                 boolean  isInserted = myDB.insertData(folderName,lienzo.outPath+"/"+folderName);
                 if (isInserted == true)
-                    Toast.makeText(MainActivity.this, "Data Inserted", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "guardado", Toast.LENGTH_LONG).show();
                 else
-                    Toast.makeText(MainActivity.this, "Data not Inserted", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "no se ha podido guardar", Toast.LENGTH_LONG).show();
                 Toast.makeText(this, "guardamos", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.hacerfoto:
@@ -279,12 +297,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 color = v.getTag().toString();
                 //lienzo.setColor(color);
                 break;
-
-
             default:
-
+                this.color=Color.BLACK;
                 break;
         }
+        preferencias.edit().putString("color", String.valueOf(this.color)).commit(); // Actualizamos preferencias
     }
 
     /**
@@ -315,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Creamos el archivo con un formato de hora, prefiojo y sufijo
+     *
      * @return devolvemos un fichero
      * @throws IOException
      */
@@ -371,6 +389,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setTitle(title);
         builder.setMessage(message);
         builder.show();
+    }
+
+    /**
+     * Abre un intent para seleccionar el fichero de imagen
+     */
+    public void abrir() {
+
+        // ACTION_OPEN_DOCUMENT intent para seleccionar el fichero desde
+        // el explorador de ficheros del sistema
+        //Cuando la aplicación envía la intent ACTION_OPEN_DOCUMENT,
+        //lanza un selector que muestra todos los proveedores de documentos coincidentes.
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");//new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // Al agregar la categoría CATEGORY_OPENABLE a la intent filtra
+        // los resultados para mostrar solo documentos que se pueden abrir, como archivos de imagen
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // sólo nos interesan las imágenes
+        intent.setType("image/*");
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
     }
 
 

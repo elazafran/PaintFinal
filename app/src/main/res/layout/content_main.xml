@@ -28,14 +28,14 @@
             />
 
 
-        <ImageButton
-            android:id="@+id/trazo"
+        <ImageView
+            android:id="@+id/paddin"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/trazo"
+            android:layout_weight="1"
             android:contentDescription="@string/boton_seleccionado"
-            />
+            android:paddingTop="8dp"
+            android:src="@drawable/trazo" />
 
         <ImageButton
             android:id="@+id/mas"
