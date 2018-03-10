@@ -166,12 +166,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()){
             case R.id.mas:
-                tamanioPath = Integer.parseInt(preferencias.getString("tamanio", ""))+10; // Accion: Aumentar a 5 el tamaño del lapiz
+                tamanioPath = Integer.parseInt(preferencias.getString("tamanio", "20"))+10; // Accion: Aumentar a 5 el tamaño del lapiz
                 preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
                 Toast.makeText(this, "más tamaño", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menos:
-                tamanioPath = Integer.parseInt(preferencias.getString("tamanio", ""))-10; // Accion: Aumentar a 5 el tamaño del lapiz
+                tamanioPath = Integer.parseInt(preferencias.getString("tamanio", "20"))-10; // Accion: Aumentar a 5 el tamaño del lapiz
                 preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
                 Toast.makeText(this, "menos tamaño", Toast.LENGTH_SHORT).show();
                 break;
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // creamos un patron para guardar los archivos
                 Date today = Calendar.getInstance().getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddhhmmss");
-                String folderName = "IMG_"+formatter.format(today)+".png";
+                String folderName = JPEG_FILE_PREFIX+formatter.format(today)+JPEG_FILE_SUFFIX;
 
                 //guardamos
                 lienzo.saveBitmap(folderName);
@@ -267,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.colornegro:
                 this.color=Color.BLACK;
                 color = v.getTag().toString();
+                Toast.makeText(this, "pintamos de negro", Toast.LENGTH_SHORT).show();
                 //lienzo.setColor(color);
                 break;
             case R.id.coloramarillo:
@@ -278,11 +279,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.colormagenta:
                 this.color=Color.MAGENTA;
                 color = v.getTag().toString();
+                Toast.makeText(this, "pintamos de magenta", Toast.LENGTH_SHORT).show();
                 //lienzo.setColor(color);
                 break;
             case R.id.colorazul:
                 this.color=Color.BLUE;
                 color = v.getTag().toString();
+                Toast.makeText(this, "pintamos de azul", Toast.LENGTH_SHORT).show();
                // lienzo.setColor(color);
                 break;
             case R.id.colorverde:
