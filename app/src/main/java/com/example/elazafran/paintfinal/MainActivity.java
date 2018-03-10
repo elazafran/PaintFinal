@@ -2,12 +2,14 @@ package com.example.elazafran.paintfinal;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int tamanio = 20;
     public static int tamanioPath; // Variable para el tamaño del pincel
     private SharedPreferences preferencias;
-
+    private DataBaseHelper myDB;
 
 
     ImageButton negro;
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.content_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        myDB = new DataBaseHelper(this); // Declaraicon del objeto de base de datos
         preferencias = PreferenceManager.getDefaultSharedPreferences(this);
 
         negro = (ImageButton)findViewById(R.id.colornegro);
@@ -200,7 +203,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "nuevo", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.recientes:
+                Cursor res = myDB.getAllData();
+                if (res.getCount() == 0){ // Si no tiene filas, cargamos mensaje de error y salimos
+                    mostrarMensaje("Error", "Nothing found");
+                    return;
+                }
+                // Si tiene cargamo un buffer con los datos y lo cargamos
+                StringBuffer buffer = new StringBuffer();
+                while (res.moveToNext()){
+                    buffer.append("Name: "+res.getString(1)+"\n");
+                    buffer.append("Ruta: "+res.getString(2)+"\n\n");
 
+                }
+                mostrarMensaje("Recientes", buffer.toString());
                 Toast.makeText(this, "recientes", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.abrir:
@@ -208,7 +223,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "abrir", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.guardar:
+                // Generamos nombre
+                Date today = Calendar.getInstance().getTime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddhhmmss");
+                String folderName = "IMG_"+formatter.format(today)+".png";
 
+                lienzo.saveBitmap(folderName); // Llamamos al metodo de guardar
+
+                // Añadimos a la base de datos
+                boolean  isInserted = myDB.insertData(folderName,lienzo.outPath+"/"+folderName);
+                if (isInserted == true)
+                    Toast.makeText(MainActivity.this, "Data Inserted", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(MainActivity.this, "Data not Inserted", Toast.LENGTH_LONG).show();
                 Toast.makeText(this, "guardamos", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.hacerfoto:
@@ -260,6 +287,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     *  utilizamos intent especificos para tomar la foto
+     */
     private void hacerFoto() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -282,6 +312,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         startActivityForResult(takePictureIntent, ACTION_TAKE_PHOTO_B);
     }
+
+    /**
+     * Creamos el archivo con un formato de hora, prefiojo y sufijo
+     * @return devolvemos un fichero
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -290,6 +326,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, cameraImage);
         return imageF;
     }
+
+    /**
+     * Obtener la imagen
+     *
+     * @return retornamos una objeto file
+     */
     private File getImageDir() {
         File storageDir = null;
 
@@ -315,6 +357,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return storageDir;
+    }
+
+    /**
+     * mostrar de la consulta
+     *
+     * @param title titulo de la ventana
+     * @param message Mensaje da mostrar
+     */
+    private void mostrarMensaje(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 
 

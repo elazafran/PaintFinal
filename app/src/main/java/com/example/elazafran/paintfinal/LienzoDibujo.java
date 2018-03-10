@@ -51,9 +51,20 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
     //  Posicion contacto en y
     private float touched_y;
     // Dibuja ruta con el dedo
-    //private Path drawPath;
+    private Path drawPath;
+    //Paint de dibujar
+    private static Paint drawPaint;
 
-    private File outPath;
+    //Color Inicial
+    private static int paintColor = 0xFFFF0000;
+    //canvas
+    private Canvas drawCanvas;
+    //canvas para guardar
+    private Bitmap canvasBitmap;
+
+    static float TamanyoPunto;
+    private static boolean borrado=false;
+    public  final File outPath = new File("/sdcard/DCIM/paintfinal"); // Ruta donde guardaremos las imagenes;
     private String sourceFileName;
 
     private SharedPreferences preferencias;
@@ -90,7 +101,7 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
     @SuppressLint("NewApi")
     public  void setBitmap(InputStream file, String fileName, File path){
         try {
-            this.outPath = path;
+
 
             this.sourceFileName = fileName;
 
@@ -108,9 +119,13 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
         }
     }
 
-    public void saveBitmap(){
+    /**
+     * Guardamos la imagen en la sd
+     * @param nombre con este parametro será guardado
+     */
+    public void saveBitmap(String nombre){
         try {
-            FileOutputStream outFile = new FileOutputStream(new File(Environment.getExternalStorageDirectory(),"copia1.png"));
+            FileOutputStream outFile = new FileOutputStream(new File(Environment.getExternalStorageDirectory(),nombre));
 
             bitMap.compress(Bitmap.CompressFormat.PNG,100,
                     outFile);
@@ -196,20 +211,7 @@ public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback 
     }
 
 
-    //Path que utilizaré para ir pintando las lineas
-    private Path drawPath;
-    //Paint de dibujar y Paint de Canvas
-    private static Paint drawPaint;
-    private Paint canvasPaint;
-    //Color Inicial
-    private static int paintColor = 0xFFFF0000;
-    //canvas
-    private Canvas drawCanvas;
-    //canvas para guardar
-    private Bitmap canvasBitmap;
 
-    static float TamanyoPunto;
-    private static boolean borrado=false;
 
     //Actualiza color
     public void setColor(String newColor){
