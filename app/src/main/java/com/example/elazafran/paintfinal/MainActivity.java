@@ -27,21 +27,32 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Clase principal de la aplicación, que implementa onclicklistenner
+ *
+ * @author elazafran
+ *
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String mCurrentPhotoPath;
+
+    // definimos las constantes
+
     private static final int ACTION_TAKE_PHOTO_B = 1;
     private static final int READ_REQUEST_CODE = 42;
     private static final String CAMERA_DIR = "/dcim/";
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
+    // definimos las variables
     private static LienzoDibujo lienzo;
     public static int color = Color.BLACK;
     public static int tamanio = 20;
-    public static int tamanioPath; // Variable para el tamaño del pincel
+    // Variable para el tamaño del pincel
+    public static int tamanioPath;
     private SharedPreferences preferencias;
     private DataBaseHelper myDB;
+    private String mCurrentPhotoPath;
 
 
     ImageButton negro;
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myDB = new DataBaseHelper(this); // Declaraicon del objeto de base de datos
         preferencias = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //inicializamos las variables
         negro = (ImageButton)findViewById(R.id.colornegro);
         rojo = (ImageButton)findViewById(R.id.colorrojo);
         verde = (ImageButton)findViewById(R.id.colorverde);
@@ -98,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         abrir = (Button)findViewById(R.id.abrir);
         recientes = (Button)findViewById(R.id.recientes);
 
-
+        // suscribimos al evento onclick los bontones
         negro.setOnClickListener(this);
         amarillo.setOnClickListener(this);
         magenta.setOnClickListener(this);
@@ -159,26 +171,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         guardar.setEnabled(enable);
     }
 
+    /**
+     *  Recogida del evento y lazamos acción
+     *
+     * @param v vista sobre la que se ha hecho click
+     */
     @Override
     public void onClick(View v) {
         String color = null;
 
 
         switch (v.getId()){
+
             case R.id.mas:
+
+                // aumentamos tamaño de la brocha
                 tamanioPath = Integer.parseInt(preferencias.getString("tamanio", "20"))+10; // Accion: Aumentar a 5 el tamaño del lapiz
                 preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
                 Toast.makeText(this, "más tamaño", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menos:
+
+                // disminuimos el tamaño de la brocha
                 tamanioPath = Integer.parseInt(preferencias.getString("tamanio", "20"))-10; // Accion: Aumentar a 5 el tamaño del lapiz
                 preferencias.edit().putString("tamanio", String.valueOf(tamanioPath)).commit(); // Actualizamos preferencias
                 Toast.makeText(this, "menos tamaño", Toast.LENGTH_SHORT).show();
                 break;
              case R.id.nuevo:
-                lienzo.NuevoDibujo();
 
-                AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
+                 //borramos el canvas
+                 AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
                 newDialog.setTitle("Nuevo Dibujo");
                 newDialog.setMessage("¿Comenzar nuevo dibujo (perderás el dibujo actual)?");
                 newDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
@@ -194,13 +216,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 newDialog.show();
-
-
-                break;
+               break;
 
 
             case R.id.recientes:
-
+                //mostramos los archivos recientes guardados con la app
 
                 Cursor res = myDB.getAllData();
                 // si no hay archivos mostramos error
@@ -257,10 +277,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "guardamos", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.hacerfoto:
+                // hacemos fotos para añadir al canvas
                 hacerFoto();
                 Toast.makeText(this, "hacemos foto", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.borrar:
+                //pintamos de blanco
                 this.color=Color.WHITE;
                 Toast.makeText(this, "pintamos de blanco", Toast.LENGTH_SHORT).show();
                 break;
@@ -304,7 +326,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 this.color=Color.BLACK;
                 break;
         }
-        preferencias.edit().putString("color", String.valueOf(this.color)).commit(); // Actualizamos preferencias
+        // una vez seleccionado el color, lo cambiamos en las preferencias
+        preferencias.edit().putString("color", String.valueOf(this.color)).commit();
     }
 
     /**

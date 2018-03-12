@@ -7,8 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by elazafran on 10/3/18.
+ * Utilizamos esta clase para crear y conectarnos a la bbdd SQLite
+ *
+ * @author elazafran
+ *
  */
+
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 

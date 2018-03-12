@@ -27,12 +27,14 @@ import java.io.InputStream;
 
 
 /**
- * Created by elazafran on 6/3/18.
+ *
+ * Utilizamos esta clase para pintar y suscribirnos a los eventos
+ *
+ * @author elazafran
+ *
  */
 
-
 @SuppressLint("AppCompatCustomView")
-
 public class LienzoDibujo extends SurfaceView implements SurfaceHolder.Callback {
 
     //Propiedades recomendadas
